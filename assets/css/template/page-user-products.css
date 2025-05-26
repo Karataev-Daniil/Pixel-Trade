@@ -1,0 +1,29 @@
+.dashboard__wrapper {
+    padding: 40px 0;
+    background-color: var(--gray_6);
+}
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.product-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+.product-item {
+    margin-bottom: 20px;
+}
+.product-card {
+    border: 1px solid var(--gray_1);
+    padding: 16px;
+    border-radius: 6px;
+    background: var(--gray_5);
+}
+.product-actions {
+    margin-top: 10px;
+}
+.product-form-wrapper {
+    margin-top: 40px;
+}

@@ -1,0 +1,242 @@
+/* Общие стили для всех кнопок */
+[class*="-button-"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font-family: 'Inter', 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    user-select: none;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s, transform 0.15s;
+    outline: none;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+/* 🔴 PRIMARY — главный акцент */
+.primary-button-larger {
+    min-height: 64px;
+    padding: 8px 32px;
+    font-size: 24px;
+    border-radius: 12px;
+    background-color: var(--orange_0);
+    color: var(--orange_5);
+    transition: background-color 0.3s, color 0.3s;
+}
+.primary-button-large {
+    min-height: 56px;
+    padding: 8px 28px;
+    font-size: 20px;
+    border-radius: 10px;
+    background-color: var(--orange_0);
+    color: var(--orange_5);
+}
+.primary-button-medium {
+    min-height: 48px;
+    padding: 8px 20px;
+    font-size: 17px;
+    border-radius: 8px;
+    background-color: var(--orange_0);
+    color: var(--orange_5);
+}
+.primary-button-small {
+    min-height: 40px;
+    padding: 8px 16px;
+    font-size: 15px;
+    border-radius: 6px;
+    background-color: var(--orange_0);
+    color: var(--orange_5);
+}
+
+/* Эффекты для PRIMARY кнопок */
+.primary-button-larger:hover,
+.primary-button-large:hover,
+.primary-button-medium:hover,
+.primary-button-small:hover {
+    background-color: var(--orange_1);
+    color: var(--orange_5);
+}
+.primary-button-larger:active,
+.primary-button-large:active,
+.primary-button-medium:active,
+.primary-button-small:active {
+    background-color: var(--orange_3);
+    transform: scale(0.97);
+}
+.primary-button-larger:focus-visible,
+.primary-button-large:focus-visible,
+.primary-button-medium:focus-visible,
+.primary-button-small:focus-visible {
+    box-shadow: 0 0 0 3px var(--orange_-2);
+}
+
+/* Темная тема: фиксированные цвета */
+html[data-theme="dark"] .primary-button-larger,
+html[data-theme="dark"] .primary-button-large,
+html[data-theme="dark"] .primary-button-medium,
+html[data-theme="dark"] .primary-button-small {
+    background-color: var(--orange_0) !important;
+    color: var(--orange_-5) !important;
+}
+html[data-theme="dark"] .primary-button-larger:hover,
+html[data-theme="dark"] .primary-button-large:hover,
+html[data-theme="dark"] .primary-button-medium:hover,
+html[data-theme="dark"] .primary-button-small:hover {
+    background-color: var(--orange_-1) !important;
+    color: var(--orange_-4) !important;
+}
+html[data-theme="dark"] .primary-button-larger:active,
+html[data-theme="dark"] .primary-button-large:active,
+html[data-theme="dark"] .primary-button-medium:active,
+html[data-theme="dark"] .primary-button-small:active {
+    background-color: var(--orange_-3) !important;
+}
+html[data-theme="dark"] .primary-button-larger:focus-visible,
+html[data-theme="dark"] .primary-button-large:focus-visible,
+html[data-theme="dark"] .primary-button-medium:focus-visible,
+html[data-theme="dark"] .primary-button-small:focus-visible {
+    box-shadow: 0 0 0 3px var(--orange_2) !important;
+}
+
+/* 🟠 SECONDARY — нейтральный тёмный */
+.secondary-button-larger,
+.secondary-button-small {
+    background-color: var(--gray_5);
+    color: var(--gray_-4);
+    border: 1px solid var(--gray_-1);
+}
+.secondary-button-larger {
+    min-height: 64px;
+    padding: 8px 32px;
+    font-size: 18px;
+    border-radius: 12px;
+}
+.secondary-button-small {
+    min-height: 40px;
+    padding: 8px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+}
+
+/* Эффекты для SECONDARY */
+.secondary-button-larger:hover,
+.secondary-button-small:hover {
+    background-color: var(--gray_5);
+    color: var(--gray_-2);
+    border-color: var(--gray_0);
+}
+.secondary-button-larger:active,
+.secondary-button-small:active {
+    background-color: var(--gray_3);
+    transform: scale(0.97);
+}
+.secondary-button-larger:focus-visible,
+.secondary-button-small:focus-visible {
+    box-shadow: 0 0 0 3px var(--gray_1);
+}
+
+/* 🟡 TERTIARY — прозрачный фон, только текст */
+.tertiary-button-small {
+    min-height: 40px;
+    padding: 8px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--gray_-2);
+}
+.tertiary-button-small:hover {
+    background-color: var(--gray_4);
+    color: var(--gray_-6);
+}
+.tertiary-button-small:active {
+    background-color: var(--gray_3);
+    color: var(--gray_-6);
+    transform: scale(0.97);
+}
+.tertiary-button-small:focus-visible {
+    box-shadow: 0 0 0 3px var(--gray_1);
+}
+
+/* 🟣 ACCENT — светлый фон с акцентной рамкой */
+.accent-button-small {
+    min-height: 40px;
+    padding: 8px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+    background-color: var(--gray_6);
+    color: var(--orange_0);
+    border: 1px solid var(--orange_-2);
+}
+.accent-button-small:hover {
+    background-color: var(--gray_5);
+    border-color: var(--orange_-1);
+}
+.accent-button-small:active {
+    background-color: var(--gray_4);
+    border-color: var(--orange_0);
+    transform: scale(0.97);
+}
+.accent-button-small:focus-visible {
+    box-shadow: 0 0 0 3px var(--orange_-2);
+}
+
+/* 🖼️ Icon-only кнопки */
+.icon-button-small,
+.icon-button-medium {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: var(--orange_0);
+    color: var(--gray_-6);
+    transition: 0.3s;
+    width: 48px;
+    min-height: 48px;
+}
+.icon-button-small {
+    width: 36px;
+    min-height: 36px;
+    padding: 8px;
+}
+.icon-button-small:hover,
+.icon-button-medium:hover {
+    background-color: var(--orange_1);
+}
+.icon-button-small:active,
+.icon-button-medium:active {
+    background-color: var(--orange_2);
+}
+
+/* 🛑 Disabled */
+button:disabled,
+div:disabled,
+a:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-color: var(--gray_2);
+}
+
+/* 🖋️ Link-style кнопки */
+.link-button {
+    font-family: 'Inter', 'IBM Plex Sans', sans-serif;
+    cursor: pointer;
+    background-color: transparent;
+    color: var(--orange_0);
+    padding: 0;
+    font-size: 16px;
+    border: none;
+    text-decoration: underline;
+    transition: 0.3s;
+}
+.link-button:hover {
+    color: var(--orange_1);
+}
+.link-button:active {
+    color: var(--orange_2);
+}
+

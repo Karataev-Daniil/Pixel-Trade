@@ -1,0 +1,297 @@
+/* 1. Header Wrapper */
+.header .header__wrapper {
+    height: 118px;
+}
+.header .header__wrapper .container-medium {
+    overflow: visible;
+}
+
+/* 2. Navigation Layout */
+.main-navigation {
+    position: relative;
+}
+
+/* Header Top */
+.header-top__wrapper {
+    background-color: var(--gray_4);
+    border-bottom: 2px solid var(--gray_1);
+}
+.main-navigation .header-top {
+    height: 58px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 2px;
+}
+.header-top-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.header-top-left .header-info {
+    display: flex;
+    flex-direction: column;
+    color: var(--gray_-6);
+}
+.header-top-right {
+    display: flex;
+}
+
+/* Header Bottom  */
+.header-bottom__wrapper {
+    background-color: var(--gray_3);
+    border-bottom: 1px solid var(--orange_0);
+}
+.main-navigation .header-bottom {
+    height: 58px;
+    display: grid;
+    grid-template-columns: 150px 1fr 200px;
+    gap: 24px;
+    align-items: center;
+}
+.main-navigation .nav-links {
+    display: flex;
+}
+.main-navigation .language-switcher {
+    display: flex;
+    align-items: center;
+}
+.main-navigation .language-switcher ul {
+    display: flex;
+    gap: 10px;
+}
+.main-navigation .language-switcher a {
+    padding: 8px 12px;
+}
+.main-navigation .logo a {
+    color: var(--orange_0);
+    text-decoration: none;
+}
+.main-navigation li {
+    list-style: none;
+}
+.main-navigation .language-switcher a {
+    border-radius: 4px;
+    color: var(--gray_-6);
+}
+.main-navigation .language-switcher a:hover {
+    color: var(--gray_-2);
+}
+.main-navigation .language-switcher a.active {
+    color: var(--orange_0);
+    font-weight: bold;
+}
+.main-navigation .language-switcher a.active:hover {
+    color: var(--orange_2);
+    transform: scale(1);
+}
+
+/* 3. Logo Animations */
+.dot {
+    transform-origin: center;
+    transition: transform 0.3s ease;
+}
+.i-letter {
+    transform-box: fill-box;
+    transform-origin: bottom center;
+    transition: transform 0.3s ease;
+}
+.logo-hover:hover .dot {
+    animation: dotBounce 1.2s ease forwards;
+}
+.logo-hover:hover .i-letter {
+    animation: lineCompress 1.2s ease forwards;
+}
+
+@keyframes dotBounce {
+    0%   { transform: translateY(0); }
+    20%  { transform: translateY(-7px); }
+    40%  { transform: translateY(0); }
+    60%  { transform: translateY(0); }
+    80%  { transform: translateY(5px); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes lineCompress {
+    0%, 20%, 40%, 60% { transform: scaleY(1); }
+    80%              { transform: scaleY(0.7); }
+    100%             { transform: scaleY(1); }
+}
+
+/* 4. Search Panel */
+.search-panel {
+    position: relative;
+    top: 0;
+    width: 100%;
+    min-height: 40px;
+    display: flex;
+    flex-direction: column;
+    transition: top 0.3s ease;
+}
+.search-field {
+    width: 100%;
+    min-height: 40px;
+    padding: 4px 12px 4px 16px;
+    box-sizing: border-box;
+    border: 1px solid var(--gray_0);
+    background-color: var(--gray_6);
+    color: var(--gray_-6);
+    border-radius: 6px;
+    transition: padding-top 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+.search-field::placeholder {
+    color: var(--gray_0);
+}
+.search-field:hover {
+    border: 1px solid var(--orange_-1);
+    background-color: var(--orange_5);
+}
+.search-field:focus,
+.search-field:not(:placeholder-shown) {
+    border: 1px solid var(--orange_0);
+    background-color: var(--orange_4);
+    color: var(--gray_-6);
+}
+.search-field:focus:not(:placeholder-shown) {
+    border: 1px solid var(--orange_-1);
+    background-color: var(--orange_3);
+}
+.search-field:not(:focus):not(:placeholder-shown) {
+    border: 1px solid var(--orange_-2);
+    background-color: var(--orange_4);
+}
+.search-field:not(:placeholder-shown):hover {
+    border: 1px solid var(--orange_-1);
+    background-color: var(--orange_3);
+}
+
+/* 5. Search Clear Button */
+.search-clear-button {
+    display: none;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+.search-field:not(:placeholder-shown) ~ .search-clear-button {
+    display: flex;
+}
+.search-clear-button::before,
+.search-clear-button::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 1px;
+    background-color: var(--gray_-6);
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+.search-clear-button::before {
+    transform: rotate(45deg);
+}
+.search-clear-button::after {
+    transform: rotate(-45deg);
+}
+.search-clear-button:hover::before,
+.search-clear-button:hover::after {
+    background-color: var(--orange_0);
+}
+
+/* 6. Theme Toggle */
+.theme-icon-button .icon-sun,
+.theme-icon-button .icon-moon {
+    display: none;
+}
+[data-theme="light"] .theme-icon-button .icon-moon {
+    display: inline;
+}
+[data-theme="dark"] .theme-icon-button .icon-sun {
+    display: inline;
+}
+
+/* 7. User Menu */
+.user-menu-wrapper {
+    position: relative;
+}
+.user-avatar {
+    padding: 0;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--gray_2);
+}
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.user-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 110%;
+    background: var(--gray_4);
+    box-shadow: 0 4px 12px rgba(110, 110, 110, 0.1);
+    padding: 8px 0;
+    border-radius: 8px;
+    min-width: 160px;
+    z-index: 999;
+}
+.user-dropdown li {
+    list-style: none;
+}
+.user-dropdown li a {
+    display: block;
+    padding: 8px 16px;
+    color: var(--gray_-6);
+    text-decoration: none;
+}
+.user-dropdown li a:hover {
+    background-color: var(--gray_3);
+}
+.user-menu-wrapper.active .user-dropdown {
+    display: block;
+}
+
+/* 8. Catalog Dropdown */
+.catalog-dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+.catalog-dropdown-wrapper button{
+    width: 100%;
+}
+.catalog-dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    display: none;
+    background: var(--background);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 8px 0;
+    min-width: 200px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.catalog-dropdown-list li {
+    padding: 6px 16px;
+}
+.catalog-dropdown-list li a {
+    text-decoration: none;
+    color: var(--text-primary);
+    display: block;
+}
+.catalog-dropdown-list.show {
+    display: block;
+}

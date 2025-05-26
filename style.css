@@ -1,0 +1,77 @@
+/**
+Theme Name: PixelTrade
+Author: Daniil
+*/
+/* Base container styles */
+.container-big,
+.container,
+.container-medium,
+.container-small,
+.container-xsmall,
+.container-xxsmall {
+  margin: 0 auto;
+  z-index: 1;
+  padding: 0 32px;
+}
+
+.container-big {
+  max-width: 1560px;
+  overflow: visible;
+}
+
+.container {
+  max-width: 1416px;
+  overflow: hidden;
+}
+
+.container-medium {
+  max-width: 1224px;
+  overflow: hidden;
+}
+
+.container-small {
+  max-width: 1128px;
+  overflow: hidden;
+}
+
+.container-xsmall {
+  max-width: 1032px;
+  overflow: hidden;
+}
+
+.container-xxsmall {
+  max-width: 840px;
+  overflow: hidden;
+}
+
+h1, h2, h3 {
+    color: var(--gray_-6);
+    margin-bottom: 16px;
+}
+label {
+    color: var(--gray_-4);
+}
+p {
+    color: var(--gray_-4);
+    margin-bottom: 16px;
+}
+.dashboard__wrapper {
+  overflow: hidden;
+}
+
+/* Small screens (440px and below) */
+@media screen and (max-width: 440px) {
+    .container-big,
+    .container,
+    .container-medium,
+    .container-small,
+    .container-xsmall,
+    .container-xxsmall {
+      padding: 0 8px;
+    }
+
+    /* Reducing section margins on small screens */
+    section {
+      margin: 40px 0;
+    }
+}
