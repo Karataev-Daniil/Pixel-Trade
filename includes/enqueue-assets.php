@@ -83,6 +83,40 @@ function custom_enqueue_assets() {
         ]);
     }
 
+    // Подключение category-selector.js
+    wp_enqueue_script(
+        'category-selector',
+        $theme_dir . '/assets/js/category-selector.js',
+        [],
+        filemtime($theme_path . '/assets/js/category-selector.js'),
+        true
+    );
+    wp_localize_script('category-selector', 'categorySelectorVars', [
+        'ajaxUrl' => admin_url('admin-ajax.php')
+    ]);
+
+    // Подключение translation-generator.js
+    wp_enqueue_script(
+        'translation-generator',
+        $theme_dir . '/assets/js/translation-generator.js',
+        [],
+        filemtime($theme_path . '/assets/js/translation-generator.js'),
+        true
+    );
+    wp_localize_script('translation-generator', 'translationVars', [
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce'   => wp_create_nonce('generate_translations_nonce')
+    ]);
+
+    wp_enqueue_script(
+        'gallery-manager',
+        $theme_dir . '/assets/js/gallery-manager.js',
+        ['sortablejs'], // если используешь Sortable через wp_enqueue_script
+        filemtime($theme_path . '/assets/js/gallery-manager.js'),
+        true
+    );
+
+
     wp_enqueue_style(
         'slick-css',
         $theme_dir . '/includes/slick/slick.css',

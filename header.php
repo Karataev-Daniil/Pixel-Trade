@@ -57,6 +57,10 @@
               }
             });
           });
+          document.querySelector('.language-toggle')?.addEventListener('click', function(e) {
+            const switcher = this.closest('.language-switcher');
+            switcher.classList.toggle('open');
+          });
         </script>
 
     </head>
@@ -93,30 +97,44 @@
               
                 <!-- Переключатели -->
                 <div class="header-top-right">
-              
                   <?php
-                  $current_query = $_GET;
-                  unset($current_query['lang']);
-                  $current_url_base = strtok($_SERVER["REQUEST_URI"], '?');
-                  ?>
+                    $current_query = $_GET;
+                    unset($current_query['lang']);
+                    $current_url_base = strtok($_SERVER["REQUEST_URI"], '?');
+
+                    $languages = [
+                      'ru' => '🇷🇺',
+                      'en' => '🇬🇧',
+                      'ro' => '🇷🇴'
+                    ];
                   
+                    $current_lang = $GLOBALS['language'];
+                    $current_flag = $languages[$current_lang] ?? '🌐';
+                  ?>
+
                   <nav class="language-switcher" aria-label="<?= t('Выбор языка', 'Language selection', 'Selectarea limbii'); ?>">
-                    <ul>
-                      <?php foreach (['ru', 'en', 'ro'] as $lang): ?>
+                    <button class="language-toggle">
+                      <span class="flag"><?= $current_flag ?></span>
+                      <span class="lang-label title-smaller"><?= strtoupper($current_lang) ?></span>
+                    </button>
+                    <div class="language-options">
+                      <?php foreach ($languages as $lang => $flag): ?>
+                        <?php if ($lang === $current_lang) continue; ?>
                         <?php
                           $query = array_merge($current_query, ['lang' => $lang]);
                           $query_string = http_build_query($query);
                           $link = $current_url_base . '?' . $query_string;
                         ?>
-                        <li>
-                          <a class="tertiary-button-small <?= $GLOBALS['language'] == $lang ? 'active' : '' ?>" href="<?= esc_url($link); ?>">
-                            <?= strtoupper($lang); ?>
-                          </a>
-                        </li>
+                        <a href="<?= esc_url($link); ?>"
+                           class="language-button title-smaller"
+                           aria-current="false"
+                           title="<?= strtoupper($lang); ?>">
+                          <span class="flag"><?= $flag ?></span>
+                          <span class="lang-label"><?= strtoupper($lang); ?></span>
+                        </a>
                       <?php endforeach; ?>
-                    </ul>
+                    </div>
                   </nav>
-
               
                   <!-- Темная тема -->
                   <button id="theme-toggle-button" class="tertiary-button-small theme-icon-button" aria-label="<?= t('Сменить тему', 'Toggle theme', 'Comută tema'); ?>" type="button">
@@ -136,11 +154,11 @@
                     </button>
                     <ul class="user-dropdown" id="user-dropdown">
                       <?php if ($is_logged_in): ?>
-                        <li class="label-small"><a href="/my-products" class="<?= $currentPath == '/my-products/' ? 'active' : '' ?>"><?= t('Мои товары', 'My Products', 'Produsele mele'); ?></a></li>
-                        <li class="label-small"><a href="/account/settings" class="<?= $currentPath == '/account/settings/' ? 'active' : '' ?>"><?= t('Настройки аккаунта', 'Account Settings', 'Setări cont'); ?></a></li>
-                        <li class="label-small"><a href="<?= wp_logout_url(home_url()); ?>"><?= t('Выход', 'Logout', 'Ieșire'); ?></a></li>
+                        <li class="label-small"><a href="/my-products" class="title-smaller"><?= t('Мои товары', 'My Products', 'Produsele mele'); ?></a></li>
+                        <li class="label-small"><a href="/account/settings" class="title-smaller"><?= t('Настройки аккаунта', 'Account Settings', 'Setări cont'); ?></a></li>
+                        <li class="label-small"><a href="<?= wp_logout_url(home_url()); ?>" class="title-smaller"><?= t('Выход', 'Logout', 'Ieșire'); ?></a></li>
                       <?php else: ?>
-                        <li class="label-small"><a href="/account/login/"><?= t('Войти', 'Login', 'Autentificare'); ?></a></li>
+                        <li class="label-small"><a href="/account/login/" class="title-smaller"><?= t('Войти', 'Login', 'Autentificare'); ?></a></li>
                       <?php endif; ?>
                     </ul>
                   </div>

@@ -1,6 +1,6 @@
 /* 1. Header Wrapper */
 .header .header__wrapper {
-    height: 118px;
+    height: 140px;
 }
 .header .header__wrapper .container-medium {
     overflow: visible;
@@ -17,7 +17,7 @@
     border-bottom: 2px solid var(--gray_1);
 }
 .main-navigation .header-top {
-    height: 58px;
+    height: 84px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -35,6 +35,7 @@
 }
 .header-top-right {
     display: flex;
+    gap: 24px;
 }
 
 /* Header Bottom  */
@@ -43,7 +44,7 @@
     border-bottom: 1px solid var(--orange_0);
 }
 .main-navigation .header-bottom {
-    height: 58px;
+    height: 56px;
     display: grid;
     grid-template-columns: 150px 1fr 200px;
     gap: 24px;
@@ -52,8 +53,11 @@
 .main-navigation .nav-links {
     display: flex;
 }
+
+
 .main-navigation .language-switcher {
     display: flex;
+    position: relative;
     align-items: center;
 }
 .main-navigation .language-switcher ul {
@@ -63,6 +67,55 @@
 .main-navigation .language-switcher a {
     padding: 8px 12px;
 }
+.main-navigation .language-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--gray_3);
+  border: 1px solid var(--gray_1);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 120px;
+  padding: 6px 0;
+}
+.language-switcher:hover .language-options,
+.language-switcher.open .language-options {
+  display: block;
+}
+.language-toggle .lang-label {
+    padding: 8px 12px;
+    text-decoration: none;
+    color: var(--gray_-6);
+    white-space: nowrap;
+    transition: background 0.2s ease;
+}
+.language-options a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: var(--gray_-6);
+    white-space: nowrap;
+    transition: background 0.2s ease;
+}
+.language-toggle .lang-label a:hover,
+.language-options a:hover {
+    color: var(--gray_-5);
+    background-color: var(--gray_4);
+}
+.language-button.active {
+    font-weight: bold;
+    color: var(--gray_-5);
+    background-color: var(--gray_4);
+}
+.flag {
+    font-size: 1.2em;
+}
+
+
 .main-navigation .logo a {
     color: var(--orange_0);
     text-decoration: none;
@@ -206,9 +259,21 @@
 }
 
 /* 6. Theme Toggle */
+.theme-icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    min-height: auto;
+    box-sizing: border-box;
+}
 .theme-icon-button .icon-sun,
 .theme-icon-button .icon-moon {
     display: none;
+    width: 24px;
+    height: 24px;
 }
 [data-theme="light"] .theme-icon-button .icon-moon {
     display: inline;
@@ -218,7 +283,7 @@
 }
 
 /* 7. User Menu */
-.user-menu-wrapper {
+.user-menu {
     position: relative;
 }
 .user-avatar {
@@ -238,10 +303,12 @@
 .user-dropdown {
     display: none;
     position: absolute;
+    width: 200px;
     right: 0;
     top: 110%;
-    background: var(--gray_4);
-    box-shadow: 0 4px 12px rgba(110, 110, 110, 0.1);
+    background: var(--gray_3);
+    border: 1px solid var(--gray_1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     padding: 8px 0;
     border-radius: 8px;
     min-width: 160px;
