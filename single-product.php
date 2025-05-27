@@ -39,8 +39,6 @@ if (have_posts()) :
                         $deepest_term = $term;
                     }
                 }
-            
-                
             ?>     
             <div class="product__wrapper edit">
                 <div class="container-medium">
@@ -51,24 +49,14 @@ if (have_posts()) :
 
                             <!-- Категории -->
                             <div class="form-group">
-                                <label class="form-label label-large"><?php echo t('Категории', 'Categories', 'Categorii'); ?></label>
-                                <div class="category-checkboxes body-medium-regular">
-                                    <?php foreach ($all_categories as $category): ?>
-                                        <div class="checkbox-item">
-                                            <label>
-                                                <input 
-                                                    type="checkbox" 
-                                                    name="product_categories[]" 
-                                                    value="<?php echo esc_attr($category->term_id); ?>" 
-                                                    <?php checked(in_array($category->term_id, wp_list_pluck($selected_categories, 'term_id'))); ?>
-                                                >
-                                                <?php echo esc_html($category->name); ?>
-                                            </label>
-                                        </div>
-                                    <?php endforeach; ?>
+                                <div id="category-selectors" data-restored="1">
+                                    <?php
+                                    $sorted_term_ids = sort_categories_by_hierarchy($selected_categories);
+                                    ?>
+                                    <div id="preselected-categories" data-terms="<?php echo esc_attr(json_encode($sorted_term_ids)); ?>"></div>
+                       
                                 </div>
                             </div>
-
 
                             <div class="form-group">          
                                 <div class="title-translations">
@@ -167,106 +155,6 @@ if (have_posts()) :
                     </div>
                 </div>
             </div>
-
-
-
-
-<script>
-function generateTranslations() {
-    const title = document.querySelector('input[name="product_title"]').value;
-    const description = document.querySelector('textarea[name="product_content"]').value;
-    const titleEn = document.querySelector('input[name="title_en"]').value.trim();
-    const titleRo = document.querySelector('input[name="title_ro"]').value.trim();
-    const descEn = document.querySelector('textarea[name="description_en"]').value.trim();
-    const descRo = document.querySelector('textarea[name="description_ro"]').value.trim();
-    const messageBlock = document.getElementById('translation-message');
-
-    if (titleEn && titleRo && descEn && descRo) {
-        messageBlock.style.color = 'orange';
-        messageBlock.textContent = 'Переводы уже заполнены.';
-        return;
-    }
-
-    messageBlock.style.color = 'black';
-    messageBlock.textContent = 'Генерация переводов...';
-
-    fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-            action: 'generate_translations',
-            title,
-            description,
-            _ajax_nonce: '<?php echo wp_create_nonce('generate_translations_nonce'); ?>'
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            if (data.data.title_en) document.querySelector('input[name="title_en"]').value = data.data.title_en;
-            if (data.data.title_ro) document.querySelector('input[name="title_ro"]').value = data.data.title_ro;
-            if (data.data.description_en) document.querySelector('textarea[name="description_en"]').value = data.data.description_en;
-            if (data.data.description_ro) document.querySelector('textarea[name="description_ro"]').value = data.data.description_ro;
-
-            messageBlock.style.color = 'green';
-            messageBlock.textContent = 'Переводы успешно сгенерированы и заполнены.';
-        } else {
-            messageBlock.style.color = 'red';
-            messageBlock.textContent = 'Ошибка перевода.';
-        }
-    })
-    .catch(() => {
-        messageBlock.style.color = 'red';
-        messageBlock.textContent = 'Ошибка связи с сервером.';
-    });
-}
-</script>
-
-
-
-            <script>
-            function checkGalleryLimit(input) {
-                const max = 6;
-                const existing = document.querySelectorAll('#gallery_preview .gallery-item').length;
-            
-                if (input.files.length + existing > max) {
-                    alert('Максимум 6 изображений!');
-                    input.value = '';
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', function () {
-                const galleryContainer = document.getElementById('gallery_preview');
-                Sortable.create(galleryContainer, {
-                    animation: 150,
-                    onEnd: updateGalleryOrder
-                });
-            
-                function updateGalleryOrder() {
-                    const order = [];
-                    document.querySelectorAll('#gallery_preview .gallery-item').forEach(item => {
-                        order.push(item.dataset.id);
-                    });
-                    document.getElementById('gallery_order_input').value = order.join(',');
-                }
-            
-                document.addEventListener('click', function (e) {
-                    if (e.target.classList.contains('gallery-remove')) {
-                        const item = e.target.closest('.gallery-item');
-                        const id = item.dataset.id;
-                    
-                        const removeInput = document.getElementById('remove_gallery_ids_input');
-                        let ids = removeInput.value ? removeInput.value.split(',') : [];
-                        ids.push(id);
-                        removeInput.value = [...new Set(ids)].join(',');
-                    
-                        item.remove();
-                    
-                        updateGalleryOrder();
-                    }
-                });
-            });
-            </script>
 
             <?php
         else:
