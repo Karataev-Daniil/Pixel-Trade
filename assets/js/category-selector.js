@@ -1,4 +1,3 @@
-
 const ajaxUrl = categorySelectorVars.ajaxUrl;
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -9,27 +8,61 @@ document.addEventListener('DOMContentLoaded', function () {
         : [];
 
     function createSelect(level, options, selectedId = null) {
+        const container = document.createElement('div');
+        container.classList.add('category-select-wrapper');
+        container.setAttribute('data-level', level);
+
+        const label = document.createElement('label');
+        label.classList.add('label-medium');
+
+        switch (level) {
+            case 0:
+                label.textContent = translations.labelLevel0;
+                break;
+            case 1:
+                label.textContent = translations.labelLevel1;
+                break;
+            default:
+                label.textContent = translations.labelLevel2;
+                break;
+        }
+
         const select = document.createElement('select');
         select.name = 'product_categories[]';
         select.classList.add('category-select');
+        select.classList.add('select-tertiary');
+        select.classList.add('body-small-regular');
         select.setAttribute('data-level', level);
 
         const defaultOption = document.createElement('option');
-        defaultOption.textContent = 'Выберите категорию';
+        defaultOption.textContent = translations.selectCategory;
         defaultOption.value = '';
         select.appendChild(defaultOption);
 
         options.forEach(opt => {
             const option = document.createElement('option');
             option.value = opt.term_id;
-            option.textContent = opt.name;
+            option.textContent = opt.name[categorySelectorVars.language] || opt.name['ru'];
             if (selectedId && parseInt(selectedId) === parseInt(opt.term_id)) {
                 option.selected = true;
             }
             select.appendChild(option);
         });
 
-        return select;
+
+        container.appendChild(label);
+        container.appendChild(select);
+        return container;
+    }
+
+    function removeLowerLevels(startLevel) {
+        const wrappers = wrapper.querySelectorAll('.category-select-wrapper');
+        wrappers.forEach(wrap => {
+            const level = parseInt(wrap.getAttribute('data-level'));
+            if (level > startLevel) {
+                wrap.remove();
+            }
+        });
     }
 
     function loadSubcategories(parentId = 0, level = 0, selectedId = null) {
@@ -38,15 +71,15 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (!Array.isArray(data) || data.length === 0) return;
 
-                const select = createSelect(level, data, selectedId);
-                wrapper.appendChild(select);
+                const selectWrapper = createSelect(level, data, selectedId);
+                const select = selectWrapper.querySelector('select');
+                wrapper.appendChild(selectWrapper);
 
                 select.addEventListener('change', function () {
-                    const next = [...wrapper.querySelectorAll('select')].filter(s => parseInt(s.dataset.level) > level);
-                    next.forEach(s => s.remove());
-
+                    const currentLevel = parseInt(this.dataset.level);
+                    removeLowerLevels(currentLevel);
                     if (this.value) {
-                        loadSubcategories(this.value, level + 1);
+                        loadSubcategories(this.value, currentLevel + 1);
                     }
                 });
             });
@@ -66,15 +99,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 break;
             }
 
-            const select = createSelect(level, data, selectedId);
-            wrapper.appendChild(select);
+            const selectWrapper = createSelect(level, data, selectedId);
+            const select = selectWrapper.querySelector('select');
+            wrapper.appendChild(selectWrapper);
 
             select.addEventListener('change', function () {
-                const next = [...wrapper.querySelectorAll('select')].filter(s => parseInt(s.dataset.level) > level);
-                next.forEach(s => s.remove());
-
+                const currentLevel = parseInt(this.dataset.level);
+                removeLowerLevels(currentLevel);
                 if (this.value) {
-                    loadSubcategories(this.value, level + 1);
+                    loadSubcategories(this.value, currentLevel + 1);
                 }
             });
 
@@ -86,15 +119,15 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json());
 
         if (last.length > 0) {
-            const select = createSelect(level, last);
-            wrapper.appendChild(select);
+            const selectWrapper = createSelect(level, last);
+            const select = selectWrapper.querySelector('select');
+            wrapper.appendChild(selectWrapper);
 
             select.addEventListener('change', function () {
-                const next = [...wrapper.querySelectorAll('select')].filter(s => parseInt(s.dataset.level) > level);
-                next.forEach(s => s.remove());
-
+                const currentLevel = parseInt(this.dataset.level);
+                removeLowerLevels(currentLevel);
                 if (this.value) {
-                    loadSubcategories(this.value, level + 1);
+                    loadSubcategories(this.value, currentLevel + 1);
                 }
             });
         }

@@ -50,6 +50,10 @@
     width: 500px;
     transition: transform 0.4s ease, width 0.4s ease;
 }
+.product-card .product-gallery-carousel .slick-slide.slick-current figure {
+    width: auto !important;
+    height: 100%;
+}
 .product-card .product-gallery-carousel .slick-slide.slick-current > div {
     width: auto;
 }
@@ -64,6 +68,7 @@
 
 /* Обычный слайд */
 .product-card .product-gallery-carousel img {
+    aspect-ratio: 4 / 3;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -249,14 +254,17 @@
 
 
 /* ркдактор поста */
+.product-create h3,
 .product-edit h3 {
     margin: 0 0 16px;
 }
+.product-create form,
 .product-edit form {
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
+.product-create .form-group,
 .product-edit .form-group {
     display: flex;
     flex-direction: column;
@@ -267,17 +275,116 @@
     border-radius: 4px;
     margin: 0 0;
 }
+.product-create .form-group.tabs,
+.product-edit .form-group.tabs {
+    margin: 32px 0 0;
+}
+.product-create .translation-block,
 .product-edit .translation-block {
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 8px;
 }
+.product-create .title-translations,
 .product-edit .title-translations {
     display: flex;
     gap: 24px;
 }
+.product-create .description-translations,
 .product-edit .description-translations {
     display: flex;
     gap: 24px;
+}
+.product-create .category-selectors,
+.product-edit .category-selectors {
+    min-height: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 24px;
+}
+.product-create .tab-buttons,
+.product-edit .tab-buttons {
+    display: flex;
+    gap: 8px;
+    margin: -56px 0 24px;
+}
+.product-create .tab-btn,
+.product-edit .tab-btn {
+    color: var(--gray_-6);
+    background-color: var(--gray_4);
+    line-height: 80%;
+    padding: 8px 16px 10px;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid var(--gray_3);
+    transition: background-color 0.3s, color 0.3s, border 0.3s;
+    user-select: none;
+    cursor: pointer;
+}
+.product-create .tab-btn.active,
+.product-edit .tab-btn.active {
+    color: var(--orange_0);
+    background-color: var(--gray_5);
+    border-bottom: 1px solid var(--gray_5);
+}
+.product-create .tab-content,
+.product-edit .tab-content {
+    display: none;
+}
+.product-create .tab-content h4,
+.product-edit .tab-content h4 {
+    margin: 0 0 8px;
+}
+.product-create .tab-content input,
+.product-edit .tab-content input {
+    margin: 0 0 24px;
+}
+.product-create .tab-content.active,
+.product-edit .tab-content.active {
+    display: block;
+}
+.product-create .category-select-wrapper,
+.product-edit .category-select-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.product-create #preselected-categories,
+.product-edit #preselected-categories {
+    display: none;
+}
+.product-create .gallery-preview,
+.product-edit .gallery-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 24px;
+}
+.product-create .gallery-item,
+.product-edit .gallery-item {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+}
+.product-create .gallery-item,
+.product-edit .gallery-item {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    object-fit: contain;
+}
+.product-create .gallery-item img,
+.product-edit .gallery-item img {
+    width: 100%;
+    height: auto;
+}
+.product-create .gallery-remove,
+.product-edit .gallery-remove {
+    position: absolute;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    top: 0;
+    right: 0;
+    background-color: var(--gray_5);
+    border-radius: 0 0 0 4px;
 }

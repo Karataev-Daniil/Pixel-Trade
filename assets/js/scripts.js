@@ -78,22 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
-document.addEventListener("DOMContentLoaded", function () {
-    const gallery = document.getElementById("gallery_preview");
-
-    if (gallery) {
-        gallery.addEventListener("click", function (e) {
-            if (e.target.classList.contains("remove-gallery-image")) {
-                const item = e.target.closest(".gallery-item");
-                if (item) {
-                    item.remove(); // Просто удаляет из UI. В обработке POST не забудьте учесть удалённые ID
-                }
-            }
-        });
-    }
-});
-
 jQuery(document).ready(function($) {
     function initFirstSlider() {
         var $slickSlider = $('.main-slider');

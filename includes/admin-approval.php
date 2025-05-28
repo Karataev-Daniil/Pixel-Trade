@@ -1,7 +1,18 @@
 <?php
 // admin-approval.php
 
-// Подтверждение ролей пользователей 
+// Добавление подменю "Ожидают подтверждения"
+add_action('admin_menu', function () {
+    add_users_page(
+        'Ожидают подтверждения',
+        'Ожидают подтверждения',
+        'manage_options',
+        'pending-user-approvals',
+        'kayo_render_pending_users_page'
+    );
+});
+
+// Уведомление в админке, если есть пользователи с pending_role
 function kayo_pending_roles_admin_notice() {
     $args = [
         'meta_key' => 'pending_role',
@@ -10,11 +21,12 @@ function kayo_pending_roles_admin_notice() {
     $pending_users = get_users($args);
 
     if (!empty($pending_users)) {
-        echo '<div class="notice notice-warning"><p>Есть пользователи, ожидающие подтверждения роли. <a href="' . admin_url('users.php') . '">Посмотреть</a></p></div>';
+        echo '<div class="notice notice-warning"><p>Есть пользователи, ожидающие подтверждения роли. <a href="' . esc_url(admin_url('users.php?page=pending-user-approvals')) . '">Посмотреть</a></p></div>';
     }
 }
 add_action('admin_notices', 'kayo_pending_roles_admin_notice');
 
+// Кнопка "Подтвердить роль" рядом с пользователем в общем списке
 function kayo_add_approve_button($actions, $user_object) {
     if (current_user_can('administrator') && get_user_meta($user_object->ID, 'pending_role', true)) {
         $approve_url = wp_nonce_url(
@@ -31,6 +43,7 @@ function kayo_add_approve_button($actions, $user_object) {
 }
 add_filter('user_row_actions', 'kayo_add_approve_button', 10, 2);
 
+// Обработка подтверждения роли
 function kayo_handle_approve_user_role() {
     if (
         isset($_GET['action'], $_GET['user_id']) &&
@@ -44,63 +57,66 @@ function kayo_handle_approve_user_role() {
         if ($pending_role) {
             wp_update_user([
                 'ID' => $user_id,
-                'role' => $pending_role,
+                'role' => sanitize_text_field($pending_role),
             ]);
             delete_user_meta($user_id, 'pending_role');
         }
 
-        wp_redirect(admin_url('users.php?role_approved=1'));
+        wp_redirect(admin_url('users.php?page=pending-user-approvals&role_approved=1'));
         exit;
     }
 }
 add_action('admin_init', 'kayo_handle_approve_user_role');
 
-add_action('admin_notices', 'kayo_show_user_role_approved_notice');
+// Уведомление об успешном подтверждении
 function kayo_show_user_role_approved_notice() {
     if (isset($_GET['role_approved']) && $_GET['role_approved'] == 1) {
         echo '<div class="notice notice-success is-dismissible"><p>Роль пользователя успешно подтверждена.</p></div>';
     }
 }
+add_action('admin_notices', 'kayo_show_user_role_approved_notice');
 
-// Модерация товаров (одобрение админом)
-add_filter('wp_insert_post_data', 'force_pending_for_vendors', 99, 2);
-function force_pending_for_vendors($data, $postarr) {
-    if ($data['post_type'] === 'product' && !current_user_can('publish_posts')) {
-        $data['post_status'] = 'pending';
+// Вывод страницы "Ожидают подтверждения"
+function kayo_render_pending_users_page() {
+    if (!current_user_can('administrator')) {
+        wp_die('У вас нет прав для доступа к этой странице.');
     }
-    return $data;
-}
 
-add_filter('post_row_actions', 'add_approve_action_link', 10, 2);
-function add_approve_action_link($actions, $post) {
-    if ($post->post_type === 'product' && $post->post_status === 'pending' && current_user_can('publish_post', $post->ID)) {
-        $approve_url = wp_nonce_url(
-            admin_url('edit.php?post_type=product&approve_product=' . $post->ID),
-            'approve_product_' . $post->ID
-        );
-        $actions['approve'] = '<a href="' . esc_url($approve_url) . '">Одобрить</a>';
-    }
-    return $actions;
-}
+    $args = [
+        'meta_key' => 'pending_role',
+        'meta_compare' => 'EXISTS',
+    ];
+    $pending_users = get_users($args);
 
-add_action('admin_init', 'handle_product_approval');
-function handle_product_approval() {
-    if (isset($_GET['approve_product'])) {
-        $product_id = intval($_GET['approve_product']);
-        if (current_user_can('publish_post', $product_id) && check_admin_referer('approve_product_' . $product_id)) {
-            wp_update_post([
-                'ID' => $product_id,
-                'post_status' => 'publish',
-            ]);
-            wp_redirect(admin_url('edit.php?post_type=product&approved=1'));
-            exit;
+    echo '<div class="wrap"><h1>Пользователи, ожидающие подтверждения</h1>';
+
+    if (empty($pending_users)) {
+        echo '<p>Нет пользователей, ожидающих подтверждения.</p>';
+    } else {
+        echo '<table class="widefat fixed striped">';
+        echo '<thead><tr><th>Имя</th><th>Email</th><th>Ожидаемая роль</th><th>Действия</th></tr></thead>';
+        echo '<tbody>';
+
+        foreach ($pending_users as $user) {
+            $pending_role = get_user_meta($user->ID, 'pending_role', true);
+            $approve_url = wp_nonce_url(
+                add_query_arg([
+                    'action' => 'approve_user_role',
+                    'user_id' => $user->ID
+                ], admin_url('users.php?page=pending-user-approvals')),
+                'approve_user_role_' . $user->ID
+            );
+
+            echo '<tr>';
+            echo '<td>' . esc_html($user->user_login) . '</td>';
+            echo '<td>' . esc_html($user->user_email) . '</td>';
+            echo '<td>' . esc_html($pending_role) . '</td>';
+            echo '<td><a class="button button-primary" href="' . esc_url($approve_url) . '">Подтвердить</a></td>';
+            echo '</tr>';
         }
-    }
-}
 
-add_action('admin_notices', 'show_approval_notice');
-function show_approval_notice() {
-    if (isset($_GET['approved']) && $_GET['approved'] == 1) {
-        echo '<div class="notice notice-success is-dismissible"><p>Товар успешно одобрен и опубликован.</p></div>';
+        echo '</tbody></table>';
     }
+
+    echo '</div>';
 }

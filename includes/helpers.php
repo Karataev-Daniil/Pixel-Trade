@@ -2,7 +2,6 @@
 function format_price_mdl_with_conversions($price_mdl) {
     $price_number = floatval($price_mdl);
 
-    // Примерные курсы (обнови при необходимости)
     $rate_euro = 0.051;   // 1 MDL ≈ 0.051 €
     $rate_usd  = 0.055;   // 1 MDL ≈ 0.055 $
 

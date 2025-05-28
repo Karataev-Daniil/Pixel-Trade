@@ -14,6 +14,26 @@ function kayo_register_custom_roles() {
 }
 add_action('init', 'kayo_register_custom_roles');
 
+function kayo_block_seller_admin_access() {
+    if (
+        is_admin() && 
+        !defined('DOING_AJAX') && 
+        current_user_can('seller') && 
+        !current_user_can('manage_options')
+    ) {
+        wp_redirect(home_url());
+        exit;
+    }
+}
+add_action('admin_init', 'kayo_block_seller_admin_access');
+
+function kayo_hide_admin_bar_for_sellers() {
+    if (current_user_can('seller') && !current_user_can('manage_options')) {
+        show_admin_bar(false);
+    }
+}
+add_action('after_setup_theme', 'kayo_hide_admin_bar_for_sellers');
+
 function kayo_remove_custom_roles() {
     remove_role('seller');
 }

@@ -129,6 +129,65 @@ function edit_product_cat_translations($term, $taxonomy) {
     <?php
 }
 
+// function delete_all_product_categories() {
+//     $terms = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => false]);
+//     foreach ($terms as $term) {
+//         wp_delete_term($term->term_id, 'product_cat');
+//     }
+// }
+// add_action('init', 'delete_all_product_categories', 20);
+
+
+// function populate_product_categories() {
+//     $categories = [
+//         [
+//             'name' => 'Мебель и интерьер',
+//             'slug' => 'furniture-interior',
+//             'ro' => 'Mobilă și interior',
+//             'en' => 'Furniture and Interior',
+//             'children' => [
+//                 ['name' => 'Кровати', 'slug' => 'beds', 'ro' => 'Paturi', 'en' => 'Beds'],
+//                 ['name' => 'Диваны', 'slug' => 'sofas', 'ro' => 'Canapele', 'en' => 'Sofas'],
+//                 ['name' => 'Столы и стулья', 'slug' => 'tables-chairs', 'ro' => 'Mese și scaune', 'en' => 'Tables and Chairs'],
+//                 ['name' => 'Шкафы и комоды', 'slug' => 'wardrobes-dressers', 'ro' => 'Dulapuri și comode', 'en' => 'Wardrobes and Dressers'],
+//             ]
+//         ]
+//     ];
+
+//     foreach ($categories as $category) {
+//         insert_product_category_recursive($category);
+//     }
+// }
+// add_action('init', 'populate_product_categories', 30);
+
+// function insert_product_category_recursive($category, $parent_id = 0) {
+//     $args = [
+//         'slug' => $category['slug']
+//     ];
+
+//     if ($parent_id > 0) {
+//         $args['parent'] = $parent_id;
+//     }
+
+//     $term = wp_insert_term($category['name'], 'product_cat', $args);
+
+//     if (!is_wp_error($term)) {
+//         $term_id = $term['term_id'];
+//         update_term_meta($term_id, 'translation_ro', $category['ro']);
+//         update_term_meta($term_id, 'translation_en', $category['en']);
+
+//         if (!empty($category['children']) && is_array($category['children'])) {
+//             foreach ($category['children'] as $child_category) {
+//                 insert_product_category_recursive($child_category, $term_id);
+//             }
+//         }
+//     }
+// }
+
+// add_action('init', 'populate_product_categories', 30);
+
+
+
 // ---------- Счётчик просмотров ----------
 function increment_product_views($post_id) {
     if (!is_singular('product')) return;

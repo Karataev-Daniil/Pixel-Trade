@@ -4,10 +4,8 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <?php wp_head(); ?>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css">
         <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
         <script>
           document.addEventListener("DOMContentLoaded", function () {
             const slider = document.getElementById('price-slider');
@@ -50,7 +48,6 @@
               dropdown.classList.toggle('show');
             });
           
-            // Закрытие при клике вне
             document.addEventListener('click', function (event) {
               if (!toggleButton.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.classList.remove('show');
@@ -62,7 +59,7 @@
             switcher.classList.toggle('open');
           });
         </script>
-
+        <?php wp_head(); ?>
     </head>
 
     <body <?php body_class(); ?>>
