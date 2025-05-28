@@ -131,4 +131,32 @@ add_action('wp_ajax_load_private_messages', function() {
     wp_die();
 });
 
+add_action('wp_ajax_autosave_product_draft', function () {
+    if (!is_user_logged_in()) wp_die();
+
+    $current_user_id = get_current_user_id();
+    $post_data = [
+        'post_title'   => sanitize_text_field($_POST['product_title'] ?? ''),
+        'post_content' => sanitize_textarea_field($_POST['product_content'] ?? ''),
+        'post_status'  => 'draft',
+        'post_type'    => 'product',
+        'post_author'  => $current_user_id,
+    ];
+
+    $existing_draft_id = get_user_meta($current_user_id, '_autosave_product_id', true);
+
+    if ($existing_draft_id && get_post_status($existing_draft_id) === 'draft') {
+        $post_data['ID'] = $existing_draft_id;
+        wp_update_post($post_data);
+    } else {
+        $draft_id = wp_insert_post($post_data);
+        if ($draft_id) {
+            update_user_meta($current_user_id, '_autosave_product_id', $draft_id);
+        }
+    }
+
+    wp_die();
+});
+
+
 ?>

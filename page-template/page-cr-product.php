@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_product'])) {
         $post_id = wp_insert_post($post_data);
 
         if ($post_id) {
+            $gallery_ids = explode(',', get_post_meta($post_id, '_product_image_gallery', true));
             update_post_meta($post_id, 'product_price', floatval($_POST['product_price']));
             update_post_meta($post_id, '_title_en', sanitize_text_field($_POST['title_en']));
             update_post_meta($post_id, '_description_en', sanitize_textarea_field($_POST['description_en']));
@@ -150,8 +151,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_product'])) {
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label"><?php echo t('Изображения (до 6)', 'Images (up to 6)', 'Imagini (până la 6)'); ?></label>
-                    <input type="file" name="product_gallery[]" accept="image/*" multiple class="form-file">
+                    <label class="form-label label-large">
+                        <?php echo t('Изображения (до 6 шт., первое — миниатюра)', 'Images (up to 6, first is thumbnail)', 'Imagini (până la 6, prima este miniatura)'); ?>
+                    </label>
+
+                    <input type="file" name="product_gallery[]" accept="image/*" multiple class="form-file body-medium-regular" id="product_gallery_input" onchange="checkGalleryLimit(this)">
+
+                    <input type="hidden" name="gallery_order" id="gallery_order_input" value="">
+                    <input type="hidden" name="remove_gallery_ids[]" id="remove_gallery_ids_input" value="">
+                    <input type="hidden" name="main_thumbnail_id" id="main_thumbnail_id" value="">
+
+                    <div id="gallery_preview" class="gallery-preview">
+                        <?php if (!empty($gallery_ids)): ?>
+                            <?php foreach (array_filter($gallery_ids) as $index => $id): ?>
+                                <div class="gallery-item<?php echo ($index === 0) ? ' thumbnail' : ''; ?>" data-id="<?php echo esc_attr($id); ?>">
+                                    <?php echo wp_get_attachment_image($id, 'full'); ?>
+                                    <input type="hidden" name="existing_gallery_ids[]" value="<?php echo esc_attr($id); ?>">
+                                    <span class="gallery-remove link-small-default" title="<?php echo t('Удалить', 'Remove', 'Șterge'); ?>">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                        </svg>
+                                    </span>
+                                    <button type="button" class="set-thumbnail-btn" title="<?php echo t('Сделать миниатюрой', 'Set as thumbnail', 'Setează ca miniatură'); ?>">★</button>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <div class="form-group">
